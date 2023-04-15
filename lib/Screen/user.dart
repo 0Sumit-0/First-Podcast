@@ -84,23 +84,15 @@ class _UserPageState extends State<UserPage> {
                 ),
                 SizedBox(height: 8),
                 // Replace with actual list of subscribed podcasts
-                SizedBox(
-                  // child: ListView.builder(
-                  //   itemCount: 3,
-                  //   itemBuilder: (BuildContext context, int index){
-                  //     return Card(child: Text("HIman"),);
-                  //   },
-                  // ),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    child: Card(
-                      elevation: 5,
-                      child: Image(
-                        image: NetworkImage(
-                          'https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg',),
-                        fit: BoxFit.cover,
-                      ),
+                Container(
+                  height: 100,
+                  width: 100,
+                  child: Card(
+                    elevation: 5,
+                    child: Image(
+                      image: NetworkImage(
+                        'https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg',),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

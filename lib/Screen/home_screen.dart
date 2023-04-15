@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podcast/Modal/podcast_player.dart';
+import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -146,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.blue,
                       size: 36,
                     ),
-                    onTap: () => PodcastPlayer(podcastUrl: "https://www.jiosaavn.com/artist/himesh-reshammiya-songs/N,m6H0-rqiY_"),
                   ),
                 );
               },
@@ -154,7 +154,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      Icon(Icons.play_circle_outlined),
+      // Icon(Icons.play_circle_outlined),
+      PlayScreen(),
       UserPage(),
     ];
     return Container(
@@ -175,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.stream),
                   label: "Play",
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.deepPurple,
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.account_circle),
