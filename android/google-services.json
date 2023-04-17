@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "536516402583",
+    "project_id": "whateverrr-ab6fe",
+    "storage_bucket": "whateverrr-ab6fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536516402583:android:3c118089613e381baf78d2",
+        "android_client_info": {
+          "package_name": "com.example.podcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536516402583-d3dcppm4pf9qten51co8ng3tmupuvequ.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdJDTKkKAV9yxS3HyNR67Eq3tL3buQ4fg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536516402583-d3dcppm4pf9qten51co8ng3tmupuvequ.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
