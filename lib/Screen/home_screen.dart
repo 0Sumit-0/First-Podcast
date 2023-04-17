@@ -25,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 30, 10, 5),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 30, 10, 5),
             child: SizedBox(
               height:50,
               child: Center(
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(height: 15),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Categories',
