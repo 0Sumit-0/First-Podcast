@@ -21,3 +21,28 @@ class Podcast{
     ),
   ];
 }
+
+
+class User{
+  final String Name;
+  final String description;
+  final String url;
+  final String imageurl;
+
+  User({required this.Name, required this.description, required this.url, required this.imageurl});
+
+  static List<User> users=[
+    User(
+      Name: "John",
+      description: "First description",
+      url: "https://wynk.in/music/song/chaska-workout-remix/un_M09054518",
+      imageurl: "assets/images/5.jpg",
+    ),
+    User(
+      Name: "Krish",
+      description: "second description",
+      url: "https://wynk.in/music/song/chaska-workout-remix/un_M09054518",
+      imageurl: "assets/images/2.jpg",
+    ),
+  ];
+}

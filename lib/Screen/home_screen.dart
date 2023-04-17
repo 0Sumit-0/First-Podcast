@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:podcast/Modal/podcast_player.dart';
+import 'package:podcast/Modal/podcast_modal.dart';
 import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
@@ -11,11 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
 
+  Podcast podcasts=Podcast.podcast[0];
   String _selectedCategory = 'All';
   int _selectedindex=0;
-
-
-
 
 
   @override
@@ -85,8 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         category,
                         style: TextStyle(
                           color: _selectedCategory == category
-                              ? Colors.white
-                              : Colors.black,
+                              ? Colors.white54
+                              : Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -112,40 +110,111 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 15,),
           Expanded(
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                    leading: Image.network(
-                      'https://picsum.photos/100/100?random=$index',
-                      height: 64,
-                      width: 64,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Text(
-                      'Podcast Title',
-                      style: TextStyle(
-                        fontFamily: 'algerian',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70,
+                  // child: ListTile(
+                  //   leading: Image.network(
+                  //     'https://picsum.photos/100/100?random=$index',
+                  //     height: 100,
+                  //     width: 100,
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  //   title: Text(
+                  //     'Podcast Title',
+                  //     style: TextStyle(
+                  //       fontFamily: 'algerian',
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.white70,
+                  //     ),
+                  //   ),
+                  //   subtitle: Text(
+                  //     'Podcast Host',
+                  //     style: TextStyle(
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.normal,
+                  //     ),
+                  //   ),
+                  //   trailing: Icon(
+                  //     Icons.play_circle_fill,
+                  //     color: Colors.blue,
+                  //     size: 36,
+                  //   ),
+                  // ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.white10,
                       ),
-                    ),
-                    subtitle: Text(
-                      'Podcast Host',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
+
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            child: Image(
+                                image: NetworkImage(
+                                  "https://picsum.photos/100/100?random=$index"
+                                ),
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      podcasts.title,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      podcasts.description,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                        fontSize: 15
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "@username",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                        fontSize: 10
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Container(
+                              child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
+                            ),
+                          )
+
+                        ],
                       ),
-                    ),
-                    trailing: Icon(
-                      Icons.play_circle_fill,
-                      color: Colors.blue,
-                      size: 36,
                     ),
                   ),
                 );
@@ -159,13 +228,13 @@ class _HomeScreenState extends State<HomeScreen> {
       UserPage(),
     ];
     return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.centerRight,
-              colors: [Colors.deepPurple,Colors.purple,Colors.purpleAccent,Colors.deepPurpleAccent])),
+      // decoration: const BoxDecoration(
+      //     gradient: LinearGradient(
+      //         begin: Alignment.topCenter,
+      //         end: Alignment.centerRight,
+      //         colors: [Colors.deepPurple,Colors.purple,Colors.purpleAccent,Colors.deepPurpleAccent])),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black,
         bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
