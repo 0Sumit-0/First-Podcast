@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:podcast/Screen/home_screen.dart';
+import 'package:podcast/Screen/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,10 +19,10 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      // await Navigator.push(context, route);
-      setState(() {
-        changeButton = false;
-      });
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+      // setState(() {
+      //   changeButton = false;
+      // });
     }
   }
 
@@ -31,21 +33,32 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               SizedBox(
-                height: 88,
+                height: 70,
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w100,
+                    letterSpacing: 3,
+                  ),
+                ),
+              ),
+              Divider(),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    Stack(
-                      children: [
-                        Image.asset(
-                          "assets/images/login2.jpg",
-                          fit: BoxFit.cover,
-                          color: Colors.transparent,
-                          colorBlendMode: BlendMode.overlay,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Image.asset(
+                      "assets/images/login3.png",
+                      fit: BoxFit.cover,
+                      color: Colors.transparent,
+                      colorBlendMode: BlendMode.overlay,
                     ),
                     SizedBox(
                       height: 20.0,
@@ -71,8 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                               labelText: "Username",
                             ),
                             validator: (value) {
-                              if (value==null) {
+                              if (value!.isEmpty) {
                                 return "Username cannot be empty";
+                              }else if (value.length < 3) {
+                                return "Username length should be atleast 3";
                               }
 
                               return null;
@@ -102,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 40.0,
                           ),
                           Material(
-                            // color: Colors.blue,
+                            color: Colors.blue,
                             borderRadius:
                             BorderRadius.circular(changeButton ? 50 : 8),
                             child: InkWell(
@@ -126,6 +141,36 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Divider(thickness: 0.3,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Do Not Have Account? ",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12),
+                              ),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Signup()));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 7),
+                                  child: Text(
+                                    "Signup",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
