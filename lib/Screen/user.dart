@@ -66,7 +66,7 @@ class _UserPageState extends State<UserPage> {
                     },
                     child: Text('Edit Profile'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
+                      backgroundColor: Colors.black,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -92,18 +92,57 @@ class _UserPageState extends State<UserPage> {
                   ),
                   SizedBox(height: 20),
                   // Replace with actual list of subscribed podcasts
-                  Container(
-                    height: 150,
-                    width: 120,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image(
-                        image: NetworkImage(
-                          'https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg',),
-                        fit: BoxFit.cover,
-                      ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.27,
+                    child: ListView.separated(
+                      separatorBuilder: (context,index){
+                        return SizedBox(width: 20,);
+                      },
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 3,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                          children: [
+                            InkWell(
+                              child: Container(
+                                height: 160,
+                                width: 130,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image(
+                                    image: NetworkImage(
+                                      'https://images.pexels.com/photos/936722/pexels-photo-936722.jpeg',),
+                                    fit: BoxFit.cover,
+                                    colorBlendMode: BlendMode.hardLight,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 100,
+                              child: Card(
+                                color: Colors.white54.withOpacity(0.8),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Illusion",
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
+
 
                   Text('Podcast A, Podcast B, Podcast C'),
                 ],
