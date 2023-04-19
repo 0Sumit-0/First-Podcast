@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podcast/Screen/home_screen.dart';
 import 'package:podcast/Screen/login_page.dart';
+import 'package:podcast/Services/auth.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -10,9 +11,12 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   String name = "";
   bool changeButton = false;
+  var user;
 
   final _formKey = GlobalKey<FormState>();
   final username_controller=TextEditingController();
+  final passd_controller=TextEditingController();
+  final email_controller=TextEditingController();
 
 
   moveToHome(BuildContext context) async {
@@ -21,7 +25,7 @@ class _SignupState extends State<Signup> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(usermod: user,)));
       // setState(() {
       //   changeButton = false;
       // });
@@ -85,6 +89,7 @@ class _SignupState extends State<Signup> {
                     child: Column(
                       children: [
                         TextFormField(
+                          controller: username_controller,
                           decoration: InputDecoration(
                             hintText: "Enter username",
                             labelText: "Username",
@@ -104,6 +109,7 @@ class _SignupState extends State<Signup> {
                           },
                         ),
                         TextFormField(
+                          controller: email_controller,
                           decoration: InputDecoration(
                             hintText: "Enter Email",
                             labelText: "Email",
@@ -119,6 +125,7 @@ class _SignupState extends State<Signup> {
                           },
                         ),
                         TextFormField(
+                          controller: passd_controller,
                           obscureText: true,
                           decoration: InputDecoration(
                             hintText: "Enter password",
@@ -141,7 +148,22 @@ class _SignupState extends State<Signup> {
                           borderRadius:
                           BorderRadius.circular(changeButton ? 50 : 8),
                           child: InkWell(
-                            onTap: () => moveToHome(context),
+                            onTap: () async{
+                              user= await AuthService().registerWithEmailAndPasswd(email_controller.text, passd_controller.text);
+                              if(user!=null){
+                                moveToHome(context);
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                      duration: Duration(seconds: 5),
+                                      content: Text("Error: User Already Exist",style: TextStyle(color: Colors.white54),),
+                                    )
+                                );
+                                throw "Please Login";
+                              }
+
+                            },
                             child: AnimatedContainer(
                               duration: Duration(seconds: 1),
                               width: changeButton ? 50 : 150,

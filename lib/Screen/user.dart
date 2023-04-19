@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:podcast/Modal/UserModel.dart';
 
 class UserPage extends StatefulWidget {
 
@@ -108,8 +109,8 @@ class _UserPageState extends State<UserPage> {
                         ),
                         SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () {
-                            // Navigate to edit profile page
+                          onPressed: (){
+
                           },
                           child: Text('Edit Profile'),
                           style: ElevatedButton.styleFrom(

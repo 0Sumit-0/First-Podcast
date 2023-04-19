@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:podcast/Modal/UserModel.dart';
 import 'package:podcast/Modal/podcast_modal.dart';
+import 'package:podcast/Screen/create_podcast.dart';
 import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
 class HomeScreen extends StatefulWidget {
-  // final String uid;
-  //
-  // const HomeScreen({super.key, required this.uid});
+  final UserModel usermod;
+  const HomeScreen({super.key, required this.usermod});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -34,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'Podcasts',
                   style: TextStyle(
-                    color: Colors.white
-                    ,
+                    color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -238,12 +239,23 @@ class _HomeScreenState extends State<HomeScreen> {
       //         colors: [Colors.deepPurple,Colors.purple,Colors.purpleAccent,Colors.deepPurpleAccent])),
       child: Scaffold(
         backgroundColor: Colors.black,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          elevation: 5.0,
+          backgroundColor: Colors.blue,
+          onPressed: (){
+            setState(() {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>create()));
+            });
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
                   icon: Icon(Icons.home_rounded),
                 label: "Home",
-                backgroundColor: Colors.black
+                backgroundColor: Colors.black54,
               ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.stream),

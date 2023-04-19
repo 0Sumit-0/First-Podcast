@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podcast/Modal/UserModel.dart';
 import 'package:podcast/Screen/home_screen.dart';
 import 'package:podcast/Screen/signup_page.dart';
 import 'package:podcast/Services/auth.dart';
@@ -12,6 +13,7 @@ class _LoginPageState extends State<LoginPage> {
   // late final user;
   String name = "";
   bool changeButton = false;
+  var user;
 
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -35,7 +37,8 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(usermod: user,)));
+
       // setState(() {
       //   changeButton = false;
       // });
@@ -140,14 +143,15 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius:
                             BorderRadius.circular(changeButton ? 50 : 8),
                             child: InkWell(
-                              onTap: () {
-                                final user= AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
+                              onTap: () async{
+                                user= await AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
                                 if(user!=null){
                                   moveToHome(context);
                                 }else{
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        duration: Duration(seconds: 10),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                        duration: Duration(seconds: 5),
                                         content: Text("Error: User Doesn't Exist",style: TextStyle(color: Colors.white54),),
                                       )
                                   );
