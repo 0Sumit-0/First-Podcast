@@ -12,7 +12,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Podcast podcasts=Podcast.podcast[0];
+  // Podcast podcasts=Podcast.podcast[0];
 
   @override
   Widget build(BuildContext context) {

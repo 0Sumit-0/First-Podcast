@@ -15,7 +15,7 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends State<PlayScreen> {
 
   final AudioPlayer _audioPlayer = AudioPlayer();
-  Podcast podcasts=Podcast.podcast[0];
+  // Podcast podcasts=Podcast.podcast[0];
 
   bool status=false;
 

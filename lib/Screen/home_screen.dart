@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
 
-  Podcast podcasts=Podcast.podcast[0];
+  // Podcast podcasts=Podcast.podcast[0];
   String _selectedCategory = 'All';
   int _selectedindex=0;
 
