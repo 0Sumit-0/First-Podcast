@@ -4,6 +4,9 @@ import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String uid;
+
+  const HomeScreen({super.key, required this.uid});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -174,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      podcasts.title,
+                                      "title",
                                       style: TextStyle(
                                           color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -185,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      podcasts.description,
+                                      "description",
                                       style: TextStyle(
                                           color: Colors.white,
                                         fontSize: 15

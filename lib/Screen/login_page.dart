@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podcast/Screen/home_screen.dart';
 import 'package:podcast/Screen/signup_page.dart';
+import 'package:podcast/Services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,10 +9,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late final user;
   String name = "";
   bool changeButton = false;
 
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
+  final myController_username = TextEditingController();
+  final myController_passwd = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController_username.dispose();
+    myController_passwd.dispose();
+    super.dispose();
+  }
+  
 
   moveToHome(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -19,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(uid: user,)));
       // setState(() {
       //   changeButton = false;
       // });
@@ -29,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -79,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           TextFormField(
+                            controller: myController_username,
                             decoration: InputDecoration(
                               hintText: "Enter username",
                               labelText: "Username",
@@ -98,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                           TextFormField(
+                            controller: myController_passwd,
                             obscureText: true,
                             decoration: InputDecoration(
                               hintText: "Enter password",
@@ -121,7 +140,21 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius:
                             BorderRadius.circular(changeButton ? 50 : 8),
                             child: InkWell(
-                              onTap: () => moveToHome(context),
+                              onTap: () {
+                                user= AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
+                                if(user!=null){
+                                  moveToHome(context);
+                                }else{
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        duration: Duration(seconds: 10),
+                                        content: Text("Error: User Doesn't Exist",style: TextStyle(color: Colors.white54),),
+                                      )
+                                  );
+                                  throw "Go For SignUp";
+                                }
+
+                              },
                               child: AnimatedContainer(
                                 duration: Duration(seconds: 1),
                                 width: changeButton ? 50 : 150,

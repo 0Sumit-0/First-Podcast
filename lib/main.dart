@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:podcast/Screen/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'Screen/login_page.dart';
 import 'Screen/playing_screen.dart';
 import 'Screen/user.dart';
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
