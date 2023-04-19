@@ -18,22 +18,26 @@ class AuthService{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: passwd) ;
       User? myuser = result.user;
-      UserModel? temp;
-      if(myuser!=null){
-        temp = UserModel(uid: myuser.uid);
-      }
-      return temp;
-    }catch(e){
-      print(e.toString());
-      return null;
+    UserModel? temp;
+    if(myuser!=null){
+      temp = UserModel(uid: myuser.uid);
     }
+    return temp;
+  }catch(e){
+  print(e.toString());
+  return null;
+  }
   }
 
   Future signInWithEmailAndPasswd(String email, String passwd) async {
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: passwd);
       User? myuser = result.user;
-      return _userFromFirebaseUser(myuser);
+      UserModel? temp;
+      if(myuser!=null){
+        temp = UserModel(uid: myuser.uid);
+      }
+      return temp;
     }catch(e){
       print(e.toString());
       return null;
