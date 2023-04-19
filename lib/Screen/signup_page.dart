@@ -12,6 +12,8 @@ class _SignupState extends State<Signup> {
   bool changeButton = false;
 
   final _formKey = GlobalKey<FormState>();
+  final username_controller=TextEditingController();
+
 
   moveToHome(BuildContext context) async {
     if (_formKey.currentState!.validate()) {

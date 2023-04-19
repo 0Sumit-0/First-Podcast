@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final user;
+  // late final user;
   String name = "";
   bool changeButton = false;
 
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(uid: user,)));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
       // setState(() {
       //   changeButton = false;
       // });
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                             BorderRadius.circular(changeButton ? 50 : 8),
                             child: InkWell(
                               onTap: () {
-                                user= AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
+                                final user= AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
                                 if(user!=null){
                                   moveToHome(context);
                                 }else{

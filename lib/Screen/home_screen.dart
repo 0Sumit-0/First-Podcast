@@ -4,9 +4,9 @@ import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String uid;
-
-  const HomeScreen({super.key, required this.uid});
+  // final String uid;
+  //
+  // const HomeScreen({super.key, required this.uid});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
