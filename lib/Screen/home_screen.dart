@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podcast/Modal/Podcastmodelarray.dart';
 import 'package:podcast/Modal/UserModel.dart';
 import 'package:podcast/Modal/podcast_modal.dart';
 import 'package:podcast/Screen/create_podcast.dart';
@@ -6,8 +7,8 @@ import 'package:podcast/Screen/playing_screen.dart';
 import 'package:podcast/Screen/user.dart';
 
 class HomeScreen extends StatefulWidget {
-  final UserModel usermod;
-  const HomeScreen({super.key, required this.usermod});
+  final String userid;
+  const HomeScreen({super.key, required this.userid});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -23,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Podcast> _showselectedCategory=[];
 
     List <Widget> _pages= <Widget>[
       Column(
@@ -68,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     setState(() {
                       _selectedCategory = category;
+                      _showselectedCategory=PodModArr(type: category).lis;
                     });
                   },
                   child: Container(
@@ -116,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: _showselectedCategory.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),

@@ -11,9 +11,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // late final user;
+
   String name = "";
   bool changeButton = false;
-  var user;
+  bool _isLoading= false;
+  var usermod;
 
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -37,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(usermod: user,)));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(userid: usermod.uid,)));
 
       // setState(() {
       //   changeButton = false;
@@ -49,7 +51,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-        body: SingleChildScrollView(
+        body: _isLoading?
+        Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),)
+            :SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
@@ -144,8 +148,9 @@ class _LoginPageState extends State<LoginPage> {
                             BorderRadius.circular(changeButton ? 50 : 8),
                             child: InkWell(
                               onTap: () async{
-                                user= await AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
-                                if(user!=null){
+                                usermod= await AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
+                                if(usermod!=null){
+
                                   moveToHome(context);
                                 }else{
                                   ScaffoldMessenger.of(context).showSnackBar(
