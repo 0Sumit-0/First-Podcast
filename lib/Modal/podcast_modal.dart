@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Podcast{
   final String title;
@@ -20,6 +21,12 @@ class Podcast{
     else{
       this.podid = podid;
     }
+  }
+
+  Future getURL() async{
+    final storageRef = FirebaseStorage.instance.ref();
+    final podUrl = await storageRef.child(this.url).getDownloadURL();
+    return podUrl;
   }
 
 }
