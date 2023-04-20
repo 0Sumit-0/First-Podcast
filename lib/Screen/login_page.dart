@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:podcast/Modal/UserModel.dart';
 import 'package:podcast/Screen/home_screen.dart';
 import 'package:podcast/Screen/signup_page.dart';
+import 'package:podcast/Services/SharedPreferences.dart';
 import 'package:podcast/Services/auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -150,6 +151,10 @@ class _LoginPageState extends State<LoginPage> {
                               onTap: () async{
                                 usermod= await AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
                                 if(usermod!=null){
+                                  HelperFunction.userNameKey=usermod.Name;
+                                  HelperFunction.userLoggedInKey=usermod.uid;
+                                  HelperFunction.saveUserLoggedInStatus(true);
+                                  HelperFunction.saveUserName(HelperFunction.userNameKey);
 
                                   moveToHome(context);
                                 }else{
