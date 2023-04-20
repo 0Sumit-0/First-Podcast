@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                               return null;
                             },
                             onChanged: (value) {
-                              name = value;
+                              name = value.replaceAll("@gmail.com", "");
                               setState(() {});
                             },
                           ),
@@ -151,6 +151,9 @@ class _LoginPageState extends State<LoginPage> {
                               onTap: () async{
                                 usermod= await AuthService().signInWithEmailAndPasswd(myController_username.text, myController_passwd.text);
                                 if(usermod!=null){
+                                  //update user
+                                  // usermod.updateUser(myController_username);
+
                                   HelperFunction.userNameKey=usermod.Name;
                                   HelperFunction.userLoggedInKey=usermod.uid;
                                   HelperFunction.saveUserLoggedInStatus(true);

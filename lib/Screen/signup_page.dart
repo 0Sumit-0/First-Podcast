@@ -106,7 +106,7 @@ class _SignupState extends State<Signup> {
                             return null;
                           },
                           onChanged: (value) {
-                            name = value;
+                            name = value.replaceAll("@gmail.com", "");
                             setState(() {});
                           },
                         ),
@@ -153,6 +153,9 @@ class _SignupState extends State<Signup> {
                             onTap: () async{
                               usermod= await AuthService().registerWithEmailAndPasswd(email_controller.text, passd_controller.text);
                               if(usermod!=null){
+                                //update  user
+                                usermod.updateUser(username_controller);
+
                                 HelperFunction.userNameKey=usermod.Name;
                                 HelperFunction.userLoggedInKey=usermod.uid;
                                 HelperFunction.saveUserLoggedInStatus(true);
