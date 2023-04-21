@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
 
   // Podcast podcasts=Podcast.podcast[0];
-  String _selectedCategory = 'All';
+  String? _selectedCategory = null;
   int _selectedindex=0;
 
 
@@ -68,10 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 String category = _categories[index];
                 return GestureDetector(
-                  onTap: () {
-                    setState(() {
+                  onTap: () async{
+                    setState(()  {
                       _selectedCategory = category;
                       _showselectedCategory=PodModArr(type: category).lis;
+                      // print("======================");
+                      // print(_showselectedCategory);
                     });
                   },
                   child: Container(
@@ -120,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _showselectedCategory.length,
+              itemCount: 10,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),

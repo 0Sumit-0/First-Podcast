@@ -9,7 +9,7 @@ class create extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.indigo,
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
@@ -157,11 +157,7 @@ class create extends StatelessWidget {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Material(
-                      color: Colors.blue,
-                      borderRadius:BorderRadius.circular(10),
-                      child: IconButton(onPressed: null, icon: Icon(Icons.add)),
-                    ),
+                    ElevatedButton(child: Text("Upload",style: TextStyle(color: Colors.white)),onPressed: (){},),
                     SizedBox(height: 25,)
                   ],
                 ),
