@@ -9,7 +9,8 @@ class Podcast{
   String? podid;
   String? imageURL;
   String? URL;
-  // dynamic refusr; //jis user ne create kiya hai uska UID idhar daal de
+  String? refusr; //jis user ne create kiya hai uska UID idhar daal de
+  String? creatorname;
 
   Podcast(){
     // final data  = {"title" : this.title, "description": this.description, "url": this.url, "imageurl": this.imageurl, "creator": this.refusr, "genre":this.genre};
@@ -24,12 +25,20 @@ class Podcast{
     // }
   }
 
-  Future makeNew(String? title,  String? description,  io.File imageurl,  String? genre, io.File audioFile) async{
+  Future makeNew(String? title,  String? description,  io.File imageurl, String? refusr, String? genre, io.File audioFile) async{
     var collectionRef = FirebaseFirestore.instance.collection('Podcast');
+    var collection = FirebaseFirestore.instance.collection('User');
     this.title = title;
     this.description = description;
     this.genre = genre;
-    Map<String, dynamic> daataa = {"title":title,  "description":description, "genre":genre};
+    this.refusr = refusr;
+    try{
+      var docSnapshot = await collection.doc(refusr).get();
+      this.creatorname = (docSnapshot.data())?["Name"];
+    }catch(e){
+      print(e.toString());
+    }
+    Map<String, dynamic> daataa = {"title":title,  "description":description, "genre":genre, "refusr": refusr, "CreatorName": this.creatorname};
     try{
       podid = await collectionRef.add(daataa).then((value) => value.id);
     }catch(e){
@@ -57,6 +66,8 @@ class Podcast{
       title = daataa?["title"];
       description = daataa?["description"];
       genre = daataa?["genre"];
+      refusr = daataa?["refusr"];
+      creatorname = daataa?["CreatorName"];
     }
     final storageRef = FirebaseStorage.instance.ref().child('Podcast').child("${podid!}.mp3");
     final storageRefimg = FirebaseStorage.instance.ref().child('Image').child("${podid!}.jpg");
@@ -72,6 +83,6 @@ class Podcast{
   }
 
   String toString(){
-    return (podid!+" ,"+title!+" ,"+description!+" ,"+genre!+" ,"+URL!+" ,"+imageURL!);
+    return (podid!+" ,"+title!+" ,"+description!+" ,"+genre!+" ,"+URL!+" ,"+imageURL!+" ,"+creatorname!+" ,"+refusr!);
   }
 }
