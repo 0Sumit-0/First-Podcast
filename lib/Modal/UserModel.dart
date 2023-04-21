@@ -43,12 +43,17 @@ class UserModel{
 
   Future getFromFirebase() async{
     var collection = FirebaseFirestore.instance.collection('User');
-    var docSnapshot = await collection.doc(uid).get();
-    if (docSnapshot.exists){
-      Map<String, dynamic>?  daataa = docSnapshot.data();
-      this.Name = daataa?["Name"];
-      this.description = daataa?["Description"];
-      this.imageurl = daataa?["imageURL"];
+    print("[]]]]]]]]]]]]][[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]");
+    try{
+      var docSnapshot = await collection.doc(uid).get();
+      if (docSnapshot.exists) {
+        Map<String, dynamic>? daataa = docSnapshot.data();
+        this.Name = daataa?["Name"];
+        this.description = daataa?["Description"];
+        this.imageurl = daataa?["imageURL"];
+      }
+    }catch(e){
+      print("-=--=-=-=-=-"+e.toString());
     }
   }
 }

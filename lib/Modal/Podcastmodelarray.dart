@@ -8,24 +8,28 @@ class PodModArr{
   Future<List<Podcast>> getArrayOf(String? type) async{
     List<Podcast> array = [];
     if(type!=null){
+      print("Nonoenoenoenoenoenoenoeno---------sdfjnwdofnowe");
       FirebaseFirestore.instance.collection('Podcast').where("genre", isEqualTo: type).snapshots().listen((data){
         for (var element in data.docs) {
+          print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
           Podcast temp = Podcast();
-          temp.getFromFirebase(element["podid"]);
+          temp.getFromFirebase(element.id);
           array.add(temp);
 
         }});
     }
     else{
-      FirebaseFirestore.instance.collection('Podcast').snapshots().listen((data){
+      print("Nonoenoenoenoenoenoenoeno---------sdfjnwdofnowe");
+      FirebaseFirestore.instance.collection('Podcast').where('genre', isNotEqualTo: "Don't Use this").snapshots().listen((data){
         for (var element in data.docs) {
+          print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
           Podcast temp = Podcast();
-          temp.getFromFirebase(element["podid"]);
+          temp.getFromFirebase(element.id.toString());
           array.add(temp);
 
         }});
     }
-
+    print(array);
     return array;
   }
 
