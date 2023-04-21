@@ -13,6 +13,7 @@ class PodModArr{
           Podcast temp = Podcast();
           temp.getFromFirebase(element["podid"]);
           array.add(temp);
+
         }});
     }
     else{
@@ -21,8 +22,10 @@ class PodModArr{
           Podcast temp = Podcast();
           temp.getFromFirebase(element["podid"]);
           array.add(temp);
+
         }});
     }
+
     return array;
   }
 

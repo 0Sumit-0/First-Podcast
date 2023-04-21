@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:podcast/Modal/Podcastmodelarray.dart';
 import 'package:podcast/Modal/UserModel.dart';
 import 'package:podcast/Modal/podcast_modal.dart';
@@ -19,13 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Podcast podcasts=Podcast.podcast[0];
   String? _selectedCategory = null;
+  bool nodata=true;
   int _selectedindex=0;
 
 
   @override
   Widget build(BuildContext context) {
 
-    List<Podcast> _showselectedCategory=[];
+    List<Podcast> _showselectedCategory;
 
     List <Widget> _pages= <Widget>[
       Column(
@@ -69,12 +71,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 String category = _categories[index];
                 return GestureDetector(
                   onTap: () async{
-                    setState(()  {
+                    setState(() {
                       _selectedCategory = category;
-                      _showselectedCategory=PodModArr(type: category).lis;
-                      // print("======================");
-                      // print(_showselectedCategory);
+
                     });
+                    _showselectedCategory= await PodModArr().getArrayOf(null);
+                    // if(_showselectedCategory.isEmpty){
+                    //   setState(() {
+                    //     nodata=true;
+                    //   });
+                    // }else{
+                    //   setState(() {
+                    //     nodata=false;
+                    //   });
+                    // }
+
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 8),
@@ -122,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: nodata? 0 : 3,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
