@@ -21,6 +21,7 @@ class AuthService{
     UserModel? temp;
     if(myuser!=null){
       temp = UserModel(uid: myuser.uid);
+      temp.makeNew();
     }
     return temp;
   }catch(e){
@@ -37,6 +38,7 @@ class AuthService{
       UserModel? temp;
       if(myuser!=null){
         temp = UserModel(uid: myuser.uid);
+        temp.getFromFirebase();
       }
       print(temp);
       return temp;

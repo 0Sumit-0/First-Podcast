@@ -43,6 +43,9 @@ dependencies:
   firebase_storage: ^11.1.1
   cloud_firestore:
   shared_preferences:
+  audio_video_progress_bar:
+  just_audio_background:
+  splashscreen: ^1.2.0
 
 dev_dependencies:
   flutter_test:

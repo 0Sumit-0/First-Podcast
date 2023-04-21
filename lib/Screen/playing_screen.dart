@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../Modal/podcast_modal.dart';
 
@@ -14,8 +16,17 @@ class PlayScreen extends StatefulWidget {
 
 class _PlayScreenState extends State<PlayScreen> {
 
-  late final AudioPlayer _audioPlayer;
+  late AudioPlayer _audioPlayer;
   // Podcast podcasts=Podcast.podcast[0];
+
+  Stream <PositionData> get _positionDataStream =>
+      CombineLatestStream.combine3(
+        _audioPlayer.positionStream,
+        _audioPlayer.bufferedPositionStream,
+        _audioPlayer.durationStream,
+            (position , bufferedPosition, duration)=> PositionData(position, bufferedPosition, duration ?? Duration.zero),
+      );
+
 
   bool status=false;
 
@@ -24,7 +35,16 @@ class _PlayScreenState extends State<PlayScreen> {
   @override
   void initState(){
     super.initState();
-    _audioPlayer= AudioPlayer();
+    _audioPlayer= AudioPlayer()..setUrl(
+        "https://firebasestorage.googleapis.com/v0/b/edshort-2cc20.appspot.com/o/test_song1.mp3?alt=media&token=9f122431-b846-48c5-b213-58f1200ae9a7"
+    );
+
+  }
+
+  @override
+  void dispose(){
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
 
@@ -103,45 +123,39 @@ class _PlayScreenState extends State<PlayScreen> {
               SizedBox(
                 height: 40,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "00:00",
-                    style: TextStyle(color: Colors.white,fontSize: 15),
-                  ),
-                  Slider.adaptive(min:0,max:duration!.inSeconds.toDouble(),value: 0, onChanged: (value){},activeColor: Colors.white,),
-                  Text(
-                    "${duration!.inMinutes}:${duration!.inSeconds % 60}",
-                    style: TextStyle(color: Colors.white,fontSize: 15),
-                  ),
-                ],
+              Container(
+                child: StreamBuilder<PositionData>(
+                  stream: _positionDataStream,
+                  builder: (context, snapshot){
+                    final positionData= snapshot.data;
+                    return SizedBox(
+                      width: 330,
+                      child: ProgressBar(
+                        barHeight: 8,
+                        baseBarColor: Colors.grey,
+                        bufferedBarColor: Colors.blueGrey,
+                        progressBarColor: Colors.white,
+                        thumbColor: Colors.white,
+                        timeLabelTextStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        progress: positionData?.position?? Duration.zero,
+                        buffered: positionData?.bufferedPosition ?? Duration.zero,
+                        total: positionData?.duration ?? Duration.zero,
+                        onSeek: _audioPlayer.seek,
+                      ),
+                    );
+                  },
+                ),
               ),
               SizedBox(
                 height: 40,
               ),
               Container(
-                  child: IconButton(
-                    icon:Icon(status? Icons.pause :Icons.play_circle,size: 60,),
-                    color: Colors.white,
-                    onPressed: (){
-                      myaudioplayer(_audioPlayer).load("assets/audio/test_song.mp3");
-                      if(status==true){
-                        setState(() {
-                          myaudioplayer(_audioPlayer).pause();
-                          status=false;
-                          print("tapped yes");
-                        });
-                      }
-                      else{
-                        setState(() {
-                          myaudioplayer(_audioPlayer).play();
-                          status==true;
-                        });
-                      }
-                    },
-                  ),
+                child: Controls(audioPlayer: _audioPlayer),
               ),
+
             ],
           ),
         ],
@@ -151,52 +165,109 @@ class _PlayScreenState extends State<PlayScreen> {
 }
 
 
+//
+// abstract class Podcastplayer {
+//   // Future<void> init();
+//   Future<void> load(String url);
+//   void play();
+//   void pause();
+//   void seek(Duration position);
+//   Stream<Duration> get position;
+//   Stream<Duration> get totalDuration;
+//   Future<void> dispose();
+// }
 
-abstract class Podcastplayer {
-  // Future<void> init();
-  Future<void> load(String url);
-  void play();
-  void pause();
-  void seek(Duration position);
-  Stream<Duration> get position;
-  Stream<Duration> get totalDuration;
-  Future<void> dispose();
+//
+// class myaudioplayer implements Podcastplayer{
+//   AudioPlayer? audioPlayer;
+//   myaudioplayer(audioplayer){
+//     this.audioPlayer=audioplayer;
+//   }
+//
+//   // Podcast podcasts= Podcast.podcast[0];
+//
+//   @override
+//   Future<Duration> load(String url)async {
+//     final source=AudioSource.uri(
+//       Uri.parse(url),
+//     );
+//     return await audioPlayer!.setAudioSource(source) ?? Duration.zero;
+//   }
+//
+//   @override
+//   void play() => audioPlayer!.play();
+//
+//   @override
+//   void pause() => audioPlayer!.pause();
+//
+//   @override
+//   void seek(Duration position) => audioPlayer!.seek(position);
+//
+//   @override
+//   Stream <Duration> get position =>audioPlayer!.positionStream;
+//
+//   @override
+//   Stream<Duration> get totalDuration => audioPlayer!.durationStream.map(
+//         (duration) => duration ?? Duration.zero,
+//   );
+//
+//   @override
+//   Future<void> dispose() async => await audioPlayer!.dispose();
+// }
+
+
+class Controls extends StatelessWidget {
+  const Controls({
+    super.key,
+    required this.audioPlayer,
+});
+  final AudioPlayer audioPlayer;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: audioPlayer.playerStateStream,
+        builder: (context,snapshot){
+          final playerState = snapshot.data;
+          final processingState= playerState?.processingState;
+          final playing =playerState?.playing;
+          if(!(playing ?? false)){
+            return IconButton(
+              onPressed: audioPlayer.play,
+              iconSize: 60,
+              icon: const Icon(Icons.play_circle),
+              color: Colors.white,
+            );
+          }else if (processingState != ProcessingState.completed){
+            return  IconButton(
+              onPressed: audioPlayer.pause,
+              iconSize: 60,
+              icon: const Icon(Icons.pause_rounded),
+              color: Colors.white,
+            );
+          }else{
+            return const Icon(
+              Icons.play_arrow_rounded,
+              size: 60,
+              color: Colors.white,
+            );
+          }
+        }
+    );
+  }
 }
 
 
-class myaudioplayer implements Podcastplayer{
-  AudioPlayer? audioPlayer;
-  myaudioplayer(audioplayer){
-    this.audioPlayer=audioplayer;
-  }
+class PositionData{
 
-  // Podcast podcasts= Podcast.podcast[0];
+  final Duration position;
+  final Duration bufferedPosition;
+  final Duration duration;
 
-  @override
-  Future<Duration> load(String url)async {
-    final source=AudioSource.uri(
-      Uri.parse(url),
-    );
-    return await audioPlayer!.setAudioSource(source) ?? Duration.zero;
-  }
+  const PositionData(
+      this.position,
+      this.bufferedPosition,
+      this.duration,
+      );
 
-  @override
-  void play() => audioPlayer!.play();
-
-  @override
-  void pause() => audioPlayer!.pause();
-
-  @override
-  void seek(Duration position) => audioPlayer!.seek(position);
-
-  @override
-  Stream <Duration> get position =>audioPlayer!.positionStream;
-
-  @override
-  Stream<Duration> get totalDuration => audioPlayer!.durationStream.map(
-        (duration) => duration ?? Duration.zero,
-  );
-
-  @override
-  Future<void> dispose() async => await audioPlayer!.dispose();
 }

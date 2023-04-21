@@ -3,6 +3,8 @@ import 'package:podcast/Screen/home_screen.dart';
 import 'package:podcast/Screen/login_page.dart';
 import 'package:podcast/Services/auth.dart';
 
+import '../Services/SharedPreferences.dart';
+
 class Signup extends StatefulWidget {
   @override
   _SignupState createState() => _SignupState();
@@ -11,7 +13,7 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   String name = "";
   bool changeButton = false;
-  var user;
+  var usermod;
 
   final _formKey = GlobalKey<FormState>();
   final username_controller=TextEditingController();
@@ -25,7 +27,7 @@ class _SignupState extends State<Signup> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(userid: user,)));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(userid: usermod,)));
       // setState(() {
       //   changeButton = false;
       // });
@@ -104,7 +106,7 @@ class _SignupState extends State<Signup> {
                             return null;
                           },
                           onChanged: (value) {
-                            name = value;
+                            name = value.replaceAll("@gmail.com", "");
                             setState(() {});
                           },
                         ),
@@ -149,8 +151,15 @@ class _SignupState extends State<Signup> {
                           BorderRadius.circular(changeButton ? 50 : 8),
                           child: InkWell(
                             onTap: () async{
-                              user= await AuthService().registerWithEmailAndPasswd(email_controller.text, passd_controller.text);
-                              if(user!=null){
+                              usermod= await AuthService().registerWithEmailAndPasswd(email_controller.text, passd_controller.text);
+                              if(usermod!=null){
+                                //update  user
+                                usermod.updateUser(username_controller);
+
+                                HelperFunction.userNameKey=usermod.Name;
+                                HelperFunction.userLoggedInKey=usermod.uid;
+                                HelperFunction.saveUserLoggedInStatus(true);
+                                HelperFunction.saveUserName(HelperFunction.userNameKey);
                                 moveToHome(context);
                               }else{
                                 ScaffoldMessenger.of(context).showSnackBar(
