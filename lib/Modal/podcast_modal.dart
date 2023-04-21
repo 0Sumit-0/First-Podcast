@@ -62,9 +62,9 @@ class Podcast{
     final storageRefimg = FirebaseStorage.instance.ref().child('Image').child("${podid!}.jpg");
     try{
       this.URL = await storageRef.getDownloadURL();
-      print("URL in the Fucking here");
+      // print("URL in the Fucking here");
       this.imageURL = await storageRefimg.getDownloadURL();
-      print("ImageUrl in the Fucking here!!!!!!!!!!");
+      // print("ImageUrl in the Fucking here!!!!!!!!!!");
     }catch(e){
       print(e.toString());
     }
