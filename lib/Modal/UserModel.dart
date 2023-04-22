@@ -43,7 +43,6 @@ class UserModel{
 
   Future getFromFirebase() async{
     var collection = FirebaseFirestore.instance.collection('User');
-    print("[]]]]]]]]]]]]][[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]");
     try{
       var docSnapshot = await collection.doc(uid).get();
       if (docSnapshot.exists) {

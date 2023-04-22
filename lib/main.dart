@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/': (context) => _isSignedIn? HomeScreen(userid: user) :LoginPage(),
         // '/homescreen': (context)=>HomeScreen(usermod: ,),
-        '/playscreen': (context) => PlayScreen(),
+        '/playscreen': (context) => PlayScreen(index: 0,pod: null,),
         '/userscreen':(context)=> UserPage(),
       },
     );

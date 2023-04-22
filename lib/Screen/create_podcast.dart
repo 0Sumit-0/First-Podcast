@@ -144,7 +144,7 @@ class create extends StatelessWidget {
                       child: TextFormField(
                         decoration: InputDecoration(
                           hintText: "Enter Genere",
-                          labelText: "Genere",
+                          labelText: "Genre",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {

@@ -8,7 +8,12 @@ import 'package:rxdart/rxdart.dart';
 import '../Modal/podcast_modal.dart';
 
 class PlayScreen extends StatefulWidget {
-  const PlayScreen({Key? key}) : super(key: key);
+  final List<Podcast?>?  pod;  // on switching take any url and list of url to play previous or next.......done for switching.....
+  final int index;
+
+
+
+  const PlayScreen({super.key, required this.pod, required this.index});
 
   @override
   State<PlayScreen> createState() => _PlayScreenState();
@@ -36,7 +41,8 @@ class _PlayScreenState extends State<PlayScreen> {
   void initState(){
     super.initState();
     _audioPlayer= AudioPlayer()..setUrl(
-        "https://firebasestorage.googleapis.com/v0/b/edshort-2cc20.appspot.com/o/test_song1.mp3?alt=media&token=9f122431-b846-48c5-b213-58f1200ae9a7"
+        // "https://firebasestorage.googleapis.com/v0/b/edshort-2cc20.appspot.com/o/test_song1.mp3?alt=media&token=9f122431-b846-48c5-b213-58f1200ae9a7"
+      (widget.pod?[widget.index]?.URL).toString()
     );
 
   }
@@ -104,15 +110,19 @@ class _PlayScreenState extends State<PlayScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: Image.asset("assets/images/4.jpg",width: 300,),
+              Container(
+                height: 200,
+                width: 300,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(60),
+                  child: Image.network((widget.pod?[widget.index]?.imageURL).toString(),width: 300,fit: BoxFit.cover,),
+                ),
               ),
               SizedBox(
                 height: 30,
               ),
               Text(
-                "title",
+                (widget.pod?[widget.index]?.title).toString(),
                 style: TextStyle(
                   letterSpacing: 2,
                   fontSize: 25,

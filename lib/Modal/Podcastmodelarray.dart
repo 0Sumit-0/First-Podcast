@@ -5,38 +5,28 @@ import 'package:podcast/Modal/podcast_modal.dart';
 class PodModArr{
   PodModArr();
 
-  List<Podcast> getArrayOf(String? type) {
+  Future<List<Podcast>> getArrayOf(String? type) async{
     List<Podcast> array = [];
     if(type!=null){
       print("Nonoenoenoenoenoenoenoeno---------sdfjnwdofnowe");
-      FirebaseFirestore.instance.collection('Podcast').where("genre", isEqualTo: type).snapshots().listen((data) async {
-        var totlen = data.docs.length;
+      FirebaseFirestore.instance.collection('Podcast').where("genre", isEqualTo: type).snapshots().listen((data){
         for (var element in data.docs) {
-          // print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
+          print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
           Podcast temp = Podcast();
-          await temp.getFromFirebase(element.id.toString());
+          temp.getFromFirebase(element.id);
           array.add(temp);
-          print(array.length);
-          print(array);
-          if(array.length==totlen){
-            break;
-          }
+
         }});
     }
     else{
       print("Nonoenoenoenoenoenoenoeno---------sdfjnwdofnowe");
-      FirebaseFirestore.instance.collection('Podcast').where('genre', isNotEqualTo: "Don't Use this").snapshots().listen((data) async {
+      FirebaseFirestore.instance.collection('Podcast').where('genre', isNotEqualTo: "Don't Use this").snapshots().listen((data){
         for (var element in data.docs) {
-          var totlen = data.docs.length;
           print("+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=");
           Podcast temp = Podcast();
-          await temp.getFromFirebase(element.id.toString());
+          temp.getFromFirebase(element.id.toString());
           array.add(temp);
-          print(array.length);
-          print(array);
-          if(array.length==totlen){
-            break;
-          }
+
         }});
     }
     print(array);

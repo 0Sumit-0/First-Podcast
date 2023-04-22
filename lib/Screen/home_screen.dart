@@ -16,18 +16,60 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
+  List _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
 
   // Podcast podcasts=Podcast.podcast[0];
   String? _selectedCategory = null;
   bool nodata=true;
   int _selectedindex=0;
 
+  List<Podcast>? _showselectedCategory;
+
+  @override
+  void initState(){
+    super.initState();
+    if(_selectedCategory!=_categories[0]){
+      getselecteddata(_selectedCategory);
+    }else{
+      getdata();
+    }
+
+
+
+  }
+
+  getdata()async{
+    _showselectedCategory=  await PodModArr().getArrayOf(null);
+    if(_showselectedCategory!=null){
+      setState(() {
+        nodata=false;
+      });
+    }
+    else{
+      nodata=true;
+    }
+
+  }
+
+  getselecteddata(selectedcategory) async{
+    _showselectedCategory= await PodModArr().getArrayOf(_selectedCategory);
+    if(_showselectedCategory!=null){
+      setState(() {
+        nodata=false;
+      });
+    }
+    else{
+      setState(() {
+        nodata=true;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
 
-    List<Podcast> _showselectedCategory;
+    // List<Podcast> _showselectedCategory=  PodModArr().getArrayOf(null);
 
     List <Widget> _pages= <Widget>[
       Column(
@@ -75,17 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       _selectedCategory = category;
 
                     });
-                    _showselectedCategory= await PodModArr().getArrayOf(null);
-                    // if(_showselectedCategory.isEmpty){
-                    //   setState(() {
-                    //     nodata=true;
-                    //   });
-                    // }else{
-                    //   setState(() {
-                    //     nodata=false;
-                    //   });
-                    // }
-
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 8),
@@ -133,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: nodata? 0 : 3,
+              itemCount: _showselectedCategory?.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10),
@@ -176,16 +207,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       child: Row(
                         children: [
-                          ClipRRect(
-                            child: Image(
-                                image: NetworkImage(
-                                  "https://picsum.photos/100/100?random=$index"
-                                ),
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.cover,
+                          Container(
+                            width: 150,
+                            height: 150,
+                            child: ClipRRect(
+                              child: Image(
+                                  image: NetworkImage(
+                                      (_showselectedCategory?[index].imageURL).toString()+"=$index"
+                                  ),
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                            borderRadius: BorderRadius.circular(20),
                           ),
                           Expanded(
                               child: Padding(
@@ -195,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "title",
+                                      (_showselectedCategory?[index].title).toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -206,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 10,
                                     ),
                                     Text(
-                                      "description",
+                                      (_showselectedCategory?[index].description).toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                         fontSize: 15
@@ -217,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 5,
                                     ),
                                     Text(
-                                      "@username",
+                                      (_showselectedCategory?[index].genre).toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                         fontSize: 10
@@ -230,7 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Container(
-                              child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
+                              child: InkWell(
+                                  child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
+                                onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(pod: _showselectedCategory,index: index,)));
+                                },
+                              ),
                             ),
                           )
 
@@ -245,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       // Icon(Icons.play_circle_outlined),
-      PlayScreen(),
+      PlayScreen(index: 0,pod: _showselectedCategory,),
       UserPage(),
     ];
     return Container(
@@ -289,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: _selectedindex,
           onTap: _onitemtapped,
         ),
-        body: Center(
+        body: nodata? CircularProgressIndicator(color: Colors.blue,) :Center(
           child: _pages.elementAt(_selectedindex),
         ),
       ),
