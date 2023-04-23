@@ -34,6 +34,9 @@ class _PlayScreenState extends State<PlayScreen> {
 
 
   bool status=false;
+  bool isliked= false;
+  bool isundo  = false;
+  bool isselected =false;
 
   Duration? duration=Duration(seconds: 00);
 
@@ -162,9 +165,54 @@ class _PlayScreenState extends State<PlayScreen> {
               SizedBox(
                 height: 40,
               ),
-              Container(
-                child: Controls(audioPlayer: _audioPlayer),
-              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 60),
+                    child: InkWell(
+                      child: isliked? Icon(Icons.thumb_down,size: 50,color: Colors.blue,): Icon(Icons.thumb_down,size: 40,color: Colors.white,),
+                      onTap: (){
+                        if(isliked==false){
+                          isliked=true;
+                        }
+                        else{
+                          isliked=false;
+                        }
+                        setState(() {
+
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Controls(audioPlayer: _audioPlayer),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 60),
+                    child: InkWell(
+                      child: Container(
+                        child: isliked? Icon(Icons.thumb_up,size: 50,color: Colors.blue,): Icon(Icons.thumb_up,size: 40,color: Colors.white,),
+                      ),
+                      onTap: (){
+                        if(isliked==false){
+                          isliked=true;
+                          isselected =true;
+                        }
+                        else{
+                          isliked=false;
+                        }
+                        setState(() {
+
+                        });
+                      },
+                    ),
+                  )
+                ],
+              )
 
             ],
           ),

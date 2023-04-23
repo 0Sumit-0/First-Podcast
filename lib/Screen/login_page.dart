@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(userid: usermod.uid,)));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(usermod: usermod,)));
 
       // setState(() {
       //   changeButton = false;

@@ -27,7 +27,7 @@ class _SignupState extends State<Signup> {
         changeButton = true;
       });
       await Future.delayed(Duration(seconds: 1));
-      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(userid: usermod,)));
+      await Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen(usermod: usermod,)));
       // setState(() {
       //   changeButton = false;
       // });

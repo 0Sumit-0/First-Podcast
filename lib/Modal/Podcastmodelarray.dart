@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:podcast/Modal/podcast_modal.dart';
 
 class PodModArr{

@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => _isSignedIn? HomeScreen(userid: user) :LoginPage(),
         // '/homescreen': (context)=>HomeScreen(usermod: ,),
         '/playscreen': (context) => PlayScreen(index: 0,pod: null,),
-        '/userscreen':(context)=> UserPage(),
+        '/userscreen':(context)=> UserPage(usermod: null,),
       },
     );
   }
