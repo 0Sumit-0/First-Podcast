@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Podcast>? _showselectedCategory;
 
+  List<Podcast>? test;
+
   @override
   void initState(){
     super.initState();
@@ -230,9 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 150,
                               child: ClipRRect(
                                 child: Image(
-                                    image: NetworkImage(
-                                        (_showselectedCategory?[index].imageURL).toString()+"=$index"
-                                    ),
+                                  image: NetworkImage(
+                                      (_showselectedCategory?[index].imageURL).toString()+"=$index"
+                                  ),
                                   width: 150,
                                   height: 150,
                                   fit: BoxFit.cover,
@@ -251,8 +253,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         (_showselectedCategory?[index].title).toString(),
                                         style: TextStyle(
                                             color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 25
                                         ),
                                       ),
                                       SizedBox(
@@ -262,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         (_showselectedCategory?[index].description).toString(),
                                         style: TextStyle(
                                             color: Colors.white,
-                                          fontSize: 15
+                                            fontSize: 15
                                         ),
                                         softWrap: true,
                                       ),
@@ -273,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         (_showselectedCategory?[index].genre).toString(),
                                         style: TextStyle(
                                             color: Colors.white,
-                                          fontSize: 10
+                                            fontSize: 10
                                         ),
                                       ),
                                     ],
@@ -284,9 +286,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.all(12.0),
                               child: Container(
                                 child: InkWell(
-                                    child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
+                                  child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
                                   onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(pod: _showselectedCategory,index: index,)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(pod: _showselectedCategory,index: index,)));
                                   },
                                 ),
                               ),
@@ -298,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-              ),
+              )
             ),
           ),
         ],
@@ -315,7 +317,9 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.blue,
           onPressed: (){
             setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>create()));
+              if(widget.userid!=null){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>create(userid: widget?.userid,)));
+              }
             });
           },
         ),
@@ -342,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: _selectedindex,
           onTap: _onitemtapped,
         ),
-        body: nodata?Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),):Center(
+        body: false?Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),):Center(
           child: _pages.elementAt(_selectedindex),
         ),
       );

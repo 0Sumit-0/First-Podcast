@@ -1,9 +1,67 @@
+
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-class create extends StatelessWidget {
-  const create({Key? key}) : super(key: key);
+import '../Modal/podcast_modal.dart';
+
+class create extends StatefulWidget {
+  final String? userid;
+
+  const create({super.key, this.userid});
+
+  @override
+  State<create> createState() => _createState();
+}
+
+class _createState extends State<create> {
+  TextEditingController _title=TextEditingController();
+
+  TextEditingController _description=TextEditingController();
+
+  TextEditingController _genre=TextEditingController();
+
+  PlatformFile? pickedFile;
+  PlatformFile? pickedFile_image;
+  late File fileobject;
+  late File imageobject;
+
+
+  bool _fileSelected=false;
+  bool _imageSelected=false;
+
+  Future fileSelect() async{
+    final result=await FilePicker.platform.pickFiles(allowMultiple: false,type: FileType.custom,allowedExtensions: ['mp3']);
+    if(result==null){
+      return;
+    }else{
+      setState(() {
+        pickedFile=result.files.first;
+        _fileSelected=true;
+        fileobject=File(result.files.single.path.toString());
+      });
+    }
+  }
+
+  Future imageSelect() async{
+    final result_image=await FilePicker.platform.pickFiles(allowMultiple: false,type: FileType.custom,allowedExtensions: ['jpg','png']);
+    if(result_image==null){
+      return;
+    }else{
+      setState(() {
+        pickedFile_image=result_image.files.first;
+        _imageSelected=true;
+        imageobject=File(result_image.files.single.path.toString());
+      });
+    }
+  }
+
+  upload(){
+    Podcast().makeNew(_title.text, _description.text, imageobject, widget.userid, _genre.text, fileobject);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +138,7 @@ class create extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: _title,
                         decoration: InputDecoration(
                           hintText: "Enter Title",
                           labelText: "Title",
@@ -100,6 +159,7 @@ class create extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: _description,
                         decoration: InputDecoration(
                           hintText: "Enter Description",
                           labelText: "Description",
@@ -121,6 +181,13 @@ class create extends StatelessWidget {
                       child: ListTile(
                         title: Text("Select File"),
                         leading: Icon(Icons.file_present_rounded),
+                        trailing: _fileSelected? Icon(Icons.done):null,
+                        subtitle: _fileSelected? Text(pickedFile!.name):null,
+                        onTap: fileSelect,
+                        onLongPress: ()=>setState(() {
+                          pickedFile=null;
+                          _fileSelected=false;
+                        }),
                       ),
                     ),
                     Divider(),
@@ -132,16 +199,24 @@ class create extends StatelessWidget {
                       child: ListTile(
                         title: Text("Select Image"),
                         leading: Icon(Icons.image),
+                        trailing: _imageSelected? Icon(Icons.done):null,
+                        subtitle: _imageSelected? Text(pickedFile_image!.name):null,
+                        onTap: imageSelect,
+                        onLongPress: ()=>setState(() {
+                          pickedFile_image=null;
+                          _imageSelected=false;
+                        }),
                       ),
                     ),
                     Divider(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("Genere",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,letterSpacing: 2,fontSize: 18),),
+                      child: Text("Genre",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,letterSpacing: 2,fontSize: 18),),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: TextFormField(
+                        controller: _genre,
                         decoration: InputDecoration(
                           hintText: "Enter Genere",
                           labelText: "Genre",
@@ -157,7 +232,7 @@ class create extends StatelessWidget {
                     SizedBox(
                       height: 20.0,
                     ),
-                    ElevatedButton(child: Text("Upload",style: TextStyle(color: Colors.white)),onPressed: (){},),
+                    ElevatedButton(child: Text("Upload",style: TextStyle(color: Colors.white)),onPressed: upload,),
                     SizedBox(height: 25,)
                   ],
                 ),
