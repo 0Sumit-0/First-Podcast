@@ -317,9 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.blue,
           onPressed: (){
             setState(() {
-              if(widget.userid!=null){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>create(userid: widget?.userid,)));
-              }
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>create(userid: widget.userid,)));
             });
           },
         ),
