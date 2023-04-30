@@ -12,7 +12,6 @@ class PlayScreen extends StatefulWidget {
   final int index;
 
 
-
   const PlayScreen({super.key, required this.pod, required this.index});
 
   @override
@@ -22,6 +21,7 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends State<PlayScreen> {
 
   late AudioPlayer _audioPlayer;
+  var currentindex;
   // Podcast podcasts=Podcast.podcast[0];
 
   Stream <PositionData> get _positionDataStream =>
@@ -47,7 +47,7 @@ class _PlayScreenState extends State<PlayScreen> {
         // "https://firebasestorage.googleapis.com/v0/b/edshort-2cc20.appspot.com/o/test_song1.mp3?alt=media&token=9f122431-b846-48c5-b213-58f1200ae9a7"
       (widget.pod?[widget.index]?.URL).toString()
     );
-
+    currentindex=widget.index;
   }
 
   @override
@@ -55,8 +55,6 @@ class _PlayScreenState extends State<PlayScreen> {
     _audioPlayer.dispose();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +67,8 @@ class _PlayScreenState extends State<PlayScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-              "assets/images/4.jpg",
+          Image.network(
+            (widget.pod?[widget.index]?.imageURL).toString(),
             fit: BoxFit.cover,
           ),
           ShaderMask(
@@ -118,14 +116,14 @@ class _PlayScreenState extends State<PlayScreen> {
                 width: 300,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(60),
-                  child: Image.network((widget.pod?[widget.index]?.imageURL).toString(),width: 300,fit: BoxFit.cover,),
+                  child: Image.network((widget.pod?[currentindex]?.imageURL).toString(),width: 300,fit: BoxFit.cover,),
                 ),
               ),
               SizedBox(
                 height: 30,
               ),
               Text(
-                (widget.pod?[widget.index]?.title).toString(),
+                (widget.pod?[currentindex]?.title).toString(),
                 style: TextStyle(
                   letterSpacing: 2,
                   fontSize: 25,
@@ -172,16 +170,13 @@ class _PlayScreenState extends State<PlayScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 60),
                     child: InkWell(
-                      child: isliked? Icon(Icons.thumb_down,size: 50,color: Colors.blue,): Icon(Icons.thumb_down,size: 40,color: Colors.white,),
+                      child: Container(
+                        child: Icon(Icons.skip_previous_rounded,size: 40,color: Colors.white,),
+                      ),
                       onTap: (){
-                        if(isliked==false){
-                          isliked=true;
-                        }
-                        else{
-                          isliked=false;
-                        }
                         setState(() {
-
+                          _audioPlayer.setUrl((widget.pod?[currentindex]?.URL).toString());
+                          currentindex=currentindex-1;
                         });
                       },
                     ),
@@ -195,22 +190,17 @@ class _PlayScreenState extends State<PlayScreen> {
                     padding: const EdgeInsets.only(right: 60),
                     child: InkWell(
                       child: Container(
-                        child: isliked? Icon(Icons.thumb_up,size: 50,color: Colors.blue,): Icon(Icons.thumb_up,size: 40,color: Colors.white,),
+                        child: Icon(Icons.skip_next_rounded,size: 40,color: Colors.white,),
                       ),
                       onTap: (){
-                        if(isliked==false){
-                          isliked=true;
-                          isselected =true;
-                        }
-                        else{
-                          isliked=false;
-                        }
                         setState(() {
-
+                          _audioPlayer.setUrl((widget.pod?[currentindex]?.URL).toString());
+                          currentindex=currentindex+1;
                         });
                       },
                     ),
-                  )
+                  ),
+
                 ],
               )
 

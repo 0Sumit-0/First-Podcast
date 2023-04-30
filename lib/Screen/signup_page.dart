@@ -154,7 +154,7 @@ class _SignupState extends State<Signup> {
                               usermod= await AuthService().registerWithEmailAndPasswd(email_controller.text, passd_controller.text);
                               if(usermod!=null){
                                 //update  user
-                                // usermod.updateUserData(username_controller.text);
+                                usermod.updateUserData(username_controller.text);
 
                                 HelperFunction.userNameKey=usermod.Name;
                                 HelperFunction.userLoggedInKey=usermod.uid;

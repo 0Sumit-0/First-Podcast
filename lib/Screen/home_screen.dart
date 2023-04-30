@@ -20,13 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
   List _categories = [    'All',    'Business',    'Comedy',    'Education',    'Health & Fitness',    'News',    'Sports',    'Technology'  ];
 
   // Podcast podcasts=Podcast.podcast[0];
-  String? _selectedCategory = null;
-  bool nodata=true;
+  String? _selectedCategory = 'All';
+  bool havedata=false;
   int _selectedindex=0;
 
   List<Podcast>? _showselectedCategory;
 
-  List<Podcast>? test;
+  List<Podcast>? pdata;
+
+
 
   @override
   void initState(){
@@ -37,36 +39,154 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getdata()async{
 
-    setState((){
-      nodata=true;
-    });
-
     _showselectedCategory=  await PodModArr().getArrayOf(null);
+    // _showselectedCategory=null;
+    pdata=_showselectedCategory;
 
-    setState((){
-      nodata=false;
-    });
+    if(_showselectedCategory!=null){
+      setState(() {
+        havedata=true;
+      });
+    }
 
-    print("-----------------------------------------");
-    print(nodata);
+
 
   }
 
   getselecteddata(selectedcategory) async{
 
-    setState((){
-      nodata=true;
+    _showselectedCategory=<Podcast>[];
+    pdata!.forEach((pod){
+      if(pod.genre==selectedcategory){
+        _showselectedCategory?.add(pod);
+      }
     });
 
-    _showselectedCategory= await PodModArr().getArrayOf(_selectedCategory);
+    setState(() {
 
-    setState((){
-      nodata=false;
     });
 
-    print("++++++++++++++++++++++++++++++++++++++++");
-    print(nodata);
+  }
 
+  show(){
+    return havedata?ListView.builder(
+      itemCount: _showselectedCategory!.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          // child: ListTile(
+          //   leading: Image.network(
+          //     'https://picsum.photos/100/100?random=$index',
+          //     height: 100,
+          //     width: 100,
+          //     fit: BoxFit.cover,
+          //   ),
+          //   title: Text(
+          //     'Podcast Title',
+          //     style: TextStyle(
+          //       fontFamily: 'algerian',
+          //       fontSize: 18,
+          //       fontWeight: FontWeight.bold,
+          //       color: Colors.white70,
+          //     ),
+          //   ),
+          //   subtitle: Text(
+          //     'Podcast Host',
+          //     style: TextStyle(
+          //       fontSize: 16,
+          //       fontWeight: FontWeight.normal,
+          //     ),
+          //   ),
+          //   trailing: Icon(
+          //     Icons.play_circle_fill,
+          //     color: Colors.blue,
+          //     size: 36,
+          //   ),
+          // ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.white10,
+              ),
+
+              child: Row(
+                children: [
+                  Container(
+                    width: 150,
+                    height: 150,
+                    child: ClipRRect(
+                      child: Image(
+                        image: NetworkImage(
+                            (_showselectedCategory![index].imageURL).toString()+"=$index"
+                        ),
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              (_showselectedCategory![index].title).toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              (_showselectedCategory![index].description).toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15
+                              ),
+                              softWrap: true,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              (_showselectedCategory![index].genre).toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      child: InkWell(
+                        child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(pod: _showselectedCategory,index: index,)));
+                        },
+                      ),
+                    ),
+                  )
+
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ):Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,));
   }
 
 
@@ -119,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     _selectedCategory = category;
                     if(_selectedCategory==_categories[0]){
-                      getdata();
+                      _showselectedCategory=pdata;
                     }
                     else if(_selectedCategory!=null){
                       getselecteddata(_selectedCategory);
@@ -183,130 +303,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                 );
               },
-              child: ListView.builder(
-                itemCount: _showselectedCategory?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    // child: ListTile(
-                    //   leading: Image.network(
-                    //     'https://picsum.photos/100/100?random=$index',
-                    //     height: 100,
-                    //     width: 100,
-                    //     fit: BoxFit.cover,
-                    //   ),
-                    //   title: Text(
-                    //     'Podcast Title',
-                    //     style: TextStyle(
-                    //       fontFamily: 'algerian',
-                    //       fontSize: 18,
-                    //       fontWeight: FontWeight.bold,
-                    //       color: Colors.white70,
-                    //     ),
-                    //   ),
-                    //   subtitle: Text(
-                    //     'Podcast Host',
-                    //     style: TextStyle(
-                    //       fontSize: 16,
-                    //       fontWeight: FontWeight.normal,
-                    //     ),
-                    //   ),
-                    //   trailing: Icon(
-                    //     Icons.play_circle_fill,
-                    //     color: Colors.blue,
-                    //     size: 36,
-                    //   ),
-                    // ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white10,
-                        ),
-
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 150,
-                              child: ClipRRect(
-                                child: Image(
-                                  image: NetworkImage(
-                                      (_showselectedCategory?[index].imageURL).toString()+"=$index"
-                                  ),
-                                  width: 150,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        (_showselectedCategory?[index].title).toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        (_showselectedCategory?[index].description).toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15
-                                        ),
-                                        softWrap: true,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        (_showselectedCategory?[index].genre).toString(),
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                child: InkWell(
-                                  child: Icon(Icons.play_circle,size: 40,color: Colors.blue,),
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => PlayScreen(pod: _showselectedCategory,index: index,)));
-                                  },
-                                ),
-                              ),
-                            )
-
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              )
+              child: show(),
             ),
           ),
         ],
       ),
       // Icon(Icons.play_circle_outlined),
-      PlayScreen(index: 0,pod: _showselectedCategory,),
+      PlayScreen(index: 0,pod: pdata,),
       UserPage(usermod: widget.usermod,),
     ];
     return  Scaffold(
@@ -344,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
           currentIndex: _selectedindex,
           onTap: _onitemtapped,
         ),
-        body: false?Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),):Center(
+        body: Center(
           child: _pages.elementAt(_selectedindex),
         ),
       );
